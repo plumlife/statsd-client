@@ -17,34 +17,36 @@ module Network.Statsd (
   histogram,
 ) where
 
-import Control.Monad
-import Control.Exception
+import           Control.Applicative
+import           Control.Exception
+import           Control.Monad
 
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Lazy as BLazy
-import qualified Data.ByteString.Char8 as BC
-import Data.ByteString.Lazy.Builder (int64LE, toLazyByteString)
-import Data.Word
-import Data.Byteable
-import Data.Maybe
+import           Data.Byteable
+import qualified Data.ByteString              as B
+import qualified Data.ByteString.Char8        as BC
+import qualified Data.ByteString.Lazy         as BLazy
+import           Data.ByteString.Lazy.Builder (int64LE, toLazyByteString)
+import           Data.Maybe
+import           Data.Word
 
-import System.Time
-import System.IO.Error
+import           System.IO.Error
+import           System.Time
 
-import Crypto.Hash
-import Crypto.Random.DRBG
+import           Crypto.Hash
+import           Crypto.Random.DRBG
 
-import Text.Printf
-import Data.Time.Units
+import           Data.Time.Units
+import           Text.Printf
 
-import qualified Network.Socket as Net hiding (send, sendTo, recv, recvFrom)
-import qualified Network.Socket.ByteString as Net
-import Network.URI
+import qualified Network.Socket               as Net hiding (recv, recvFrom,
+                                                      send, sendTo)
+import qualified Network.Socket.ByteString    as Net
+import           Network.URI
 
 type Stat = String
 
-data StatsdClient = StatsdClient { getSocket :: Net.Socket
-                                 , getNamespace :: Stat
+data StatsdClient = StatsdClient { getSocket     :: Net.Socket
+                                 , getNamespace  :: Stat
                                  , getSigningKey :: Maybe Key
                                  }
 
